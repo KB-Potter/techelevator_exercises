@@ -2,6 +2,9 @@
 
 <c:import url="/WEB-INF/jsp/header.jsp" />
 
+<c:url var="pwValidator" value="/passwordValidation.js" />
+<script src="${pwValidator}"></script>
+
 <script type="text/javascript">
 	$(document).ready(function () {
 	
@@ -12,7 +15,10 @@
 					required : true
 				},
 				password : {
-					required : true
+					required : true,
+					minlength: 10,
+					maxlength: 128,
+					complexPassword: true
 				},
 				confirmPassword : {
 					required : true,		

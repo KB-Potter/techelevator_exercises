@@ -31,8 +31,9 @@ public class AuthenticationController {
 	@RequestMapping(path="/login", method=RequestMethod.POST)
 	public String login(@RequestParam String userName, 
 						@RequestParam String password, 
-						ModelMap model) {
+						ModelMap model, HttpSession session) {
 		if(userDAO.searchForUsernameAndPassword(userName, password)) {
+			session.invalidate();
 			model.put("currentUser", userName);
 			return "redirect:/users/"+userName;
 		} else {

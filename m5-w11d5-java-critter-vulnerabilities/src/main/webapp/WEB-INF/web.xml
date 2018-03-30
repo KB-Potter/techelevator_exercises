@@ -7,6 +7,11 @@
 		 
   <display-name>Hello Spring MVC Application</display-name>
   
+  <session-config>
+  	<session-timeout>10</session-timeout>  <!-- set in minutes -->
+  	<tracking-mode>COOKIE</tracking-mode>
+  </session-config>
+  
   <!-- This is the Spring DispatcherServlet -->
   <servlet>
     <servlet-name>springmvc</servlet-name>
@@ -30,4 +35,6 @@
   	<url-pattern>*.jpg</url-pattern>
   	<url-pattern>*.gif</url-pattern>
   </servlet-mapping>
+  
+
 </web-app>
