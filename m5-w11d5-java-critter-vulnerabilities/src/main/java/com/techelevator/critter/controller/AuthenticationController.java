@@ -31,10 +31,14 @@ public class AuthenticationController {
 	@RequestMapping(path="/login", method=RequestMethod.POST)
 	public String login(@RequestParam String userName, 
 						@RequestParam String password, 
+						@RequestParam(required=false) String destination,
 						ModelMap model, HttpSession session) {
 		if(userDAO.searchForUsernameAndPassword(userName, password)) {
 			session.invalidate();
 			model.put("currentUser", userName);
+			if (destination != null) {
+				return "redirect:" + destination;
+			}
 			return "redirect:/users/"+userName;
 		} else {
 			return "redirect:/login";

@@ -14,23 +14,19 @@ import javax.servlet.http.HttpServletResponse;
 
 public class AuthorizationFilter implements Filter {
 
-	@Override
-	public void init(FilterConfig filterConfig) throws ServletException {
-		
-	}
 
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
 		
-		HttpServletRequest httpRequest = (HttpServletRequest)request;
-		HttpServletResponse httpResponse = (HttpServletResponse)response;
+		HttpServletRequest httpRequest = (HttpServletRequest) request;
+		HttpServletResponse httpResponse = (HttpServletResponse) response;
 		
 		String sessionUser = getUserFromSession(httpRequest);
 		String requestUser = getUserFromRequest(httpRequest);
 		
-		if(requestUser != null && requestUser.equals(sessionUser) == false) {
-			if(sessionUser == null) {
+		if (requestUser != null && !requestUser.equals(sessionUser)) {
+			if (sessionUser == null) {
 				redirectToLoginPage(httpRequest, httpResponse);
 			} else {
 				httpResponse.sendError(403);
@@ -39,37 +35,43 @@ public class AuthorizationFilter implements Filter {
 		chain.doFilter(request, response);
 	}
 
-	private void redirectToLoginPage(HttpServletRequest httpRequest, HttpServletResponse httpResponse)
-			throws IOException {
+	@Override
+	public void init(FilterConfig arg0) throws ServletException {
+		
+		
+	}
+	
+	@Override
+	public void destroy() {
+
+	}
+
+	private void redirectToLoginPage(HttpServletRequest httpRequest, HttpServletResponse httpResponse) throws IOException {
 		
 		String originalRequest = httpRequest.getRequestURL().toString();
 		String queryString = httpRequest.getQueryString();
-		if(queryString != null) {
+		if (queryString != null) {
 			originalRequest = originalRequest + "?" + queryString;
 		}
 		
 		String context = httpRequest.getServletContext().getContextPath();
-		httpResponse.sendRedirect(context+"/login?destination="+URLEncoder.encode(originalRequest, "UTF-8"));
+		String redirectRequest = context + "/login?destination=" + URLEncoder.encode(originalRequest, "UTF-8");
+		httpResponse.sendRedirect(redirectRequest);
 	}
 
 	private String getUserFromSession(HttpServletRequest httpRequest) {
-		return (String)httpRequest.getSession().getAttribute("currentUser");
+		return (String) httpRequest.getSession().getAttribute("currentUser");
 	}
-
+	
 	private String getUserFromRequest(HttpServletRequest httpRequest) {
-		String requestUser = null;
-		String[] path = httpRequest.getServletPath().split("/");
-		if(path.length >= 3) {
-			if(path[2].equals("new") == false) {
-				requestUser = path[2];
+		String user = null;
+		String[] pathParts = httpRequest.getServletPath().split("/");
+		if (pathParts.length >= 3) {
+			if (pathParts[2].equals("new") == false) {
+				user = pathParts[2];
 			}
 		}
-		return requestUser;
+		return user;
 	}
-
-	@Override
-	public void destroy() {
-		
-	}
-
+	
 }
