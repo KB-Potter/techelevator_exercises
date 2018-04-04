@@ -46,9 +46,9 @@ public class JDBCMessageDAO implements MessageDAO {
 		String sqlSelectPublicMessagesByUser = "SELECT * "+
 											   "FROM message "+
 											   "WHERE private = FALSE "+
-											   "AND sender_name = '"+userName+"' "+
+											   "AND sender_name = ? "+
 											   "ORDER BY create_date DESC ";
-		SqlRowSet results = jdbcTemplate.queryForRowSet(sqlSelectPublicMessagesByUser);
+		SqlRowSet results = jdbcTemplate.queryForRowSet(sqlSelectPublicMessagesByUser, userName);
 		return mapRowSetToMessages(results);
 	}
 	

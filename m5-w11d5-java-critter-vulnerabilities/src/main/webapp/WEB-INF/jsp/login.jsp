@@ -30,6 +30,7 @@
 	<div class="col-sm-4">
 		<c:url var="formAction" value="/login" />
 		<form method="POST" action="${formAction}">
+			<input type="hidden" name="destination" value="${param.destination}" />
 			<div class="form-group">
 				<label for="userName">User Name: </label>
 				<input type="text" id="userName" name="userName" placeHolder="User Name" class="form-control" />
