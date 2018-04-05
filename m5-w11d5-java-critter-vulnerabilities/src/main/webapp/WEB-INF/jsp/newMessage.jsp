@@ -26,6 +26,7 @@
 <div class="row">
 	<div class="col-md-5">
 		<form action="${formAction}" method="POST">
+		<input type="hidden" name="CSRF_TOKEN" value="${CSRF_TOKEN}" />
 			<div class="form-group">
 				<select id="visibility" name="visibility" class="form-control">
 					<option value="public">Public</option>

@@ -36,7 +36,7 @@ public class AuthenticationController {
 		if(userDAO.searchForUsernameAndPassword(userName, password)) {
 			session.invalidate();
 			model.put("currentUser", userName);
-			if (destination != null) {
+			if (isValidRedirect(destination)) {
 				return "redirect:" + destination;
 			}
 			return "redirect:/users/"+userName;
@@ -45,6 +45,10 @@ public class AuthenticationController {
 		}
 	}
 
+	private boolean isValidRedirect(String destination) {
+		return (destination != null && destination.startsWith("http://localhost"));
+	}
+	
 	@RequestMapping(path="/logout", method=RequestMethod.POST)
 	public String logout(ModelMap model, HttpSession session) {
 		model.remove("currentUser");
